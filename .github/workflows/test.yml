@@ -6,8 +6,11 @@ on:
   pull_request:
     branches: [ master ]
 
+env:
+  APP_NAME: 'BATTERY_WATCH'
+
 jobs:
-  build:
+  build-artifact:
 
     runs-on: windows-latest
     strategy:
@@ -30,6 +33,65 @@ jobs:
         poetry run pyinstaller main.py --clean --onefile
     - uses: actions/upload-artifact@v3
       with:
-        name: artifact
+        name: artifact-windows
         path: |
           dist/main.exe
+
+
+  create-release:
+
+    runs-on: ubuntu-latest
+    needs:
+      - build-artifact
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: Create Release
+        id: create-release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ github.ref }}
+          release_name: ${{ github.ref }}
+          body: Release
+          draft: false
+          prerelease: false
+
+      - name: Write upload_url to file
+        run: echo '${{ steps.create-release.outputs.upload_url }}' > upload_url.txt
+
+      - uses: actions/upload-artifact@v3
+        with:
+          name: create-release
+          path: upload_url.txt
+
+
+    upload-release:
+    
+      runs-on: ubuntu-latest
+      needs: create-release
+
+      steps:
+        - uses: actions/download-artifact@v3
+          with:
+            name: artifact-windows
+  
+        - uses: actions/download-artifact@v3
+          with:
+            name: create-release
+  
+        - id: vars
+          run: |
+            echo "::set-output name=upload_url::$(cat upload_url.txt)"
+  
+        - name: Upload Release Asset
+          id: upload-release-asset 
+          uses: actions/upload-release-asset@v1
+          env:
+            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          with:
+            upload_url: ${{ steps.vars.outputs.upload_url }}
+            asset_path: ${{ env.APP_NAME }}_windows.exe
+            asset_name: ${{ env.APP_NAME }}_application/zip
+            asset_content_type: ${{ matrix.asset_content_type }}

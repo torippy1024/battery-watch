@@ -41,3 +41,6 @@ pip-wheel-metadata
 poetry/core/*
 
 battery.csv
+dist
+build
+*.spec

@@ -86,8 +86,7 @@ jobs:
           echo "::set-output name=upload_url::$(cat upload_url.txt)"
 
       - name: info
-        run: ls
-        run: pwd
+        run: ls && pwd
 
       - name: Upload Release Asset
         id: upload-release-asset 

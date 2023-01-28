@@ -27,3 +27,6 @@ jobs:
     - name: Poetry Install Dependencies
       run: |
         poetry install --no-interaction
+    - name: pyinstaller
+      run: |
+        poetry run pyinstaller main.py --clean --onefile

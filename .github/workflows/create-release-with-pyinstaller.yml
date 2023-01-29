@@ -30,7 +30,7 @@ jobs:
     - name: Poetry Install Dependencies
       run: |
         poetry install --no-interaction
-        poetry add -D pyinstaller
+        poetry add --group dev pyinstaller
     - name: pyinstaller
       run: |
         poetry run pyinstaller ${{ env.ENTRYPOINT }} --clean --onefile --name ${{ env.APP_NAME }}_windows

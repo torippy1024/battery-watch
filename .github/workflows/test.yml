@@ -27,6 +27,7 @@ jobs:
     - name: Poetry Install Dependencies
       run: |
         poetry install --no-interaction
+        poetry add -D flake8 pyinstaller
     - name: Lint with flake8
       run: |
         poetry run flake8 src --show-source --statistics

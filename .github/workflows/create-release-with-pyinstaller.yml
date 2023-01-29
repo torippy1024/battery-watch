@@ -8,7 +8,7 @@ on:
 env:
   APP_NAME: 'BATTERY_WATCH'
   PYTHON_VERSION: '3.10'
-  ENTRYPOINT: 'src/main.py'
+  ENTRYPOINT: 'src/mai.py'
 
 jobs:
   create-release:

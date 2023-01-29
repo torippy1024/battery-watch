@@ -32,11 +32,11 @@ jobs:
         poetry install --no-interaction
     - name: pyinstaller
       run: |
-        poetry run pyinstaller ${{ env.ENTRYPOINT }} --clean --onefile --name ${{ env.APP_NAME }}_windows_${{ github.event.pull_request.title }}
+        poetry run pyinstaller ${{ env.ENTRYPOINT }} --clean --onefile --name ${{ env.APP_NAME }}_windows
     - name: Release
       uses: softprops/action-gh-release@v1
       with:
         name: ${{ github.event.pull_request.title }}
         tag_name: ${{ github.event.pull_request.title }}
         generate_release_notes: true
-        files: dist/${{ env.APP_NAME }}_windows_${{ github.event.pull_request.title }}.exe
+        files: dist/${{ env.APP_NAME }}_windows.exe

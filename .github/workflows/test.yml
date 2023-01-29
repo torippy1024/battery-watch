@@ -27,6 +27,13 @@ jobs:
     - name: Poetry Install Dependencies
       run: |
         poetry install --no-interaction
+        poetry add --group dev flake8 pytest pyinstaller
+    - name: Lint with flake8
+      run: |
+        poetry run flake8 src --show-source --statistics
+    - name: Test with pytest
+      run : |
+        poetry run pytest
     - name: pyinstaller
       run: |
         poetry run pyinstaller ${{ env.ENTRYPOINT }} --clean --onefile --name ${{ env.APP_NAME }}_windows

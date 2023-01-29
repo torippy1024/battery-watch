@@ -9,9 +9,8 @@ env:
   ENTRYPOINT: 'src/main.py'
 
 jobs:
-  create-release:
+  test:
 
-    if: contains(github.head_ref, 'release')
     runs-on: windows-latest
     strategy:
       fail-fast: false

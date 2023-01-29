@@ -29,4 +29,4 @@ jobs:
         poetry install --no-interaction
     - name: pyinstaller
       run: |
-        poetry run pyinstaller ${{ env.ENTRYPOINT }} --clean --onefile --name ${{ env.APP_NAME }}_windows_${{ github.event.pull_request.title }}
+        poetry run pyinstaller ${{ env.ENTRYPOINT }} --clean --onefile --name ${{ env.APP_NAME }}_windows

@@ -1,0 +1,33 @@
+name: Test with pyinstaller
+
+on:
+- pull_request
+
+env:
+  APP_NAME: 'BATTERY_WATCH'
+  PYTHON_VERSION: '3.10'
+  ENTRYPOINT: 'src/main.py'
+
+jobs:
+  create-release:
+
+    if: contains(github.head_ref, 'release')
+    runs-on: windows-latest
+    strategy:
+      fail-fast: false
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: ${{ env.PYTHON_VERSION }}
+    - name: Install poetry
+      run: |
+        pip install poetry
+    - name: Poetry Install Dependencies
+      run: |
+        poetry install --no-interaction
+    - name: pyinstaller
+      run: |
+        poetry run pyinstaller ${{ env.ENTRYPOINT }} --clean --onefile --name ${{ env.APP_NAME }}_windows_${{ github.event.pull_request.title }}

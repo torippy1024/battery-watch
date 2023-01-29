@@ -1,7 +1,9 @@
-name: Test with pyinstaller
+name: Create Release with pyinstaller
 
-on: 
+on:
   pull_request:
+    types:
+      - closed
 
 env:
   APP_NAME: 'BATTERY_WATCH'
@@ -9,8 +11,9 @@ env:
   ENTRYPOINT: 'src/main.py'
 
 jobs:
-  test:
+  create-release:
 
+    if: contains(github.head_ref, 'release')
     runs-on: windows-latest
     strategy:
       fail-fast: false
@@ -30,3 +33,10 @@ jobs:
     - name: pyinstaller
       run: |
         poetry run pyinstaller ${{ env.ENTRYPOINT }} --clean --onefile --name ${{ env.APP_NAME }}_windows_${{ github.event.pull_request.title }}
+    - name: Release
+      uses: softprops/action-gh-release@v1
+      with:
+        name: ${{ github.event.pull_request.title }}
+        tag_name: ${{ github.event.pull_request.title }}
+        generate_release_notes: true
+        files: dist/${{ env.APP_NAME }}_windows_${{ github.event.pull_request.title }}.exe

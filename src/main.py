@@ -10,7 +10,7 @@ def task():
     with open(output_file, "a") as f:
         btr = psutil.sensors_battery()
         print(f"{datetime.datetime.today()},{btr.percent},{btr.power_plugged}", file=f)
-        print(f"{datetime.datetime.today()},{btr.percent},{btr.power_plugged}")
+        print(f"{datetime.datetime.today()}\t{btr.percent}\t\t{btr.power_plugged}")
 
 if __name__ == "__main__":
     print("########################################")
@@ -21,6 +21,7 @@ if __name__ == "__main__":
     print("Use Ctrl-C to exit")
     print("")
     print(f"Executing...")
+    print("[date]\t\t\t\t[percent]\t[power_plugged]")
     task()
     schedule.every(interval).seconds.do(task)
     while True:
